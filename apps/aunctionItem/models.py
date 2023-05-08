@@ -61,3 +61,34 @@ class Lot(models.Model):
     def __str__(self):
         return self.product_name
     
+class WishList(models.Model):
+    lot=models.CharField(max_length=1000)
+    name=models.CharField(max_length=200)
+    slug=models.SlugField(max_length=200,db_index=True,null=True,blank=True)
+    lot_id=models.IntegerField()
+    Wishlisted_date=models.DateTimeField(default=datetime.now,blank=True)
+    user_id=models.IntegerField(blank=False)
+    
+    def get_absolute_url(self):
+        return reverse('auction:single-item',args=[self.lot_id,self.slug])
+    
+    def __srt__(self):
+        return self.name
+    
+
+class Contact(models.Model):
+    lot=models.CharField(max_length=1000)
+    lot_id=models.IntegerField()
+    name=models.CharField(max_length=200)
+    email=models.CharField(max_length=200)
+    slug=models.SlugField(max_length=200,db_index=True,null=True,blank=True)
+    message=models.TextField(blank=True)
+    contact_date=models.DateTimeField(default=datetime.now,blank=True)
+    user_id=models.IntegerField(blank=True)
+    
+    def get_absolute_url(self):
+        return reverse('auction:single-item',args=[self.lot_id,self.slug])
+    
+    def __str__(self):
+        return self.name
+    
