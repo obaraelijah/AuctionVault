@@ -4,11 +4,10 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager
 
-class PublishedManager(models.Model):
-    
+class PublishedManager(models.Manager):
     def get_queryset(self):
-        
-        return super(PublishedManager, self).filter(status='published')
+        return super().get_queryset().filter(status='published')
+
     
 class Post(models.Model):
     STATUS_CHOICES=(
