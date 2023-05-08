@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('supersecret/', admin.site.urls),
     path('',include('apps.aunctionapp.urls'),name='auction-page'),
+    path('accounts/',include('apps.accounts.urls'),name='accounts-page'),
     path('blog/',include('apps.blog.urls'),name='blog-app'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

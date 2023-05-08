@@ -32,3 +32,47 @@ def register(request):
             return redirect('register')
             
     return render(request,'register.html')
+
+def login(request):
+    if request.method == "POST":
+        username=request.POST['username']
+        password=request.POST['password']
+        user=auth.authenticate(username=username,password=password)
+        if user is not None:
+            auth.login(request,user)
+            messages.add_message(request, messages.SUCCESS, 'You have now logged in successfully')
+            return redirect('dashboard')
+        else:
+            messages.add_message(request, messages.ERROR, 'Invalid Credentials')
+            return redirect('login')
+   
+    else:
+        return render(request,'login.html')
+
+def logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        messages.add_message(request, messages.SUCCESS, 'You have been logged out successfully')
+        return redirect('home-page')
+             
+    return redirect('home-page')
+
+
+def dashboard(request):
+    contact_dashboard=Contact.objects.order_by('-contact_date').filter(user_id=request.user.id)  
+   
+    context={
+        'contacts':contact_dashboard
+      
+    }
+    return render(request,'dashboard.html',context)
+
+
+def wishlist(request):
+    contact_wishlist=WishList.objects.order_by('-Wishlisted_date').filter(user_id=request.user.id)  
+   
+    context={
+        'wishlists':contact_wishlist
+      
+    }
+    return render(request,'wishlist.html',context)
