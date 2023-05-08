@@ -64,5 +64,37 @@ def post_detail(request, year, month, day, post):
         'comment_form': comment_form,
         'similar_posts': similar_posts,
     }
-    return render(request,'blog_details.html', context)      
+    return render(request,'blog_details.html', context) 
+
+def post_share(request, post_id):
+    #get post by id
+    post=get_object_or_404(Post, id=post_id, status='published')
+    sent=False
+    if request.method == 'POST':
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            cleaned_data=form.cleaned_data
+            #send email
+            post_url=request.build_absolute_uri( post.get_absolute_url())
+            subject= f"{cleaned_data['name']} recommends you read "\
+                 f"{post.title}"
+            message=f"Read {post.title} at {post_url}\n\n"\
+                f"{cleaned_data['name']}\'s comments :{cleaned_data['comments']}"
+            send_mail(subject,message,'elijahobara357@gmail.com',
+                      [cleaned_data['to']])
+            sent=True
+    else:
+        #not a post request
+        form=EmailPostForm()
+    context={
+        'post':post,
+        'form':form,
+        'sent':sent,
+    }
+    return render(request,'share.html',context)
+
+
+
+            
+      
         
