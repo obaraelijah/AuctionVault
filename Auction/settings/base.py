@@ -24,9 +24,9 @@ ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
 # Application definition
 
 DJANGO_APPS = [
+    'django.contrib.contenttypes',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -40,6 +40,8 @@ THIRD_PARTY_APPS=[
     "django_countries",
     "phonenumber_field",
     'rest_framework_simplejwt',
+    'taggit',
+    'django.contrib.humanize',
 ]
 
 LOCAL_APPS = [
@@ -106,6 +108,21 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+#channels config
+
+
+ASGI_APPLICATION = 'Auction.routing.application'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -128,6 +145,23 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_FILES_DIR = []
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
+
+
+#messages
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',   
+}
+
+#Email configuraion
+
+
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='elijahobara357@gmail.com'
+EMAIL_HOST_PASSWORD='############'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
