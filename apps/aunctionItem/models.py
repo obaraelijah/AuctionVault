@@ -92,3 +92,27 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
     
+class Auction(models.Model):
+    start =  models.DateTimeField(auto_now=False)
+    curr_time =  models.DateTimeField(auto_now=False)
+    item = models.OneToOneField(Lot, on_delete=models.CASCADE, related_name="auction")
+    
+    
+    def __str__(self):
+        return self.item.product_name
+    
+
+class Message(models.Model):
+    auction=models.ForeignKey(Auction, on_delete=models.CASCADE,related_name='auction') 
+    author=models.ForeignKey(User,related_name='author_messsages',on_delete=models.CASCADE)
+    timecap = models.DateTimeField(auto_now_add=True)
+    price = models.TextField()
+    
+    def __str__(self):
+        return self.author.username
+    
+class Subscribe(models.Model):
+    email=models.EmailField()
+    
+    def __str__(self):
+        return self.email
