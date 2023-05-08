@@ -1,3 +1,40 @@
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+from django.urls import reverse
+from taggit.managers import TaggableManager
 
-# Create your models here.
+class PublishedManager(models.Model):
+    
+    def get_queryset(self):
+        
+        return super(PublishedManager, self).filter(status='published')
+    
+class Post(models.Model):
+    STATUS_CHOICES=(
+        ('draft','Draft'),
+        ('published','Published')
+    )
+    title=models.CharField(max_length=300)
+    slug=models.SlugField(max_length=300,unique_for_date='publish')
+    author=models.ForeignKey(User,related_name='blog_posts',on_delete=models.CASCADE)
+    body=models.TextField()
+    publish=models.DateTimeField(default=timezone.now)
+    created=models.DateTimeField(default=timezone.now)
+    updated=models.DateTimeField(default=timezone.now)
+    status=models.CharField(max_length=10,choices=STATUS_CHOICES,default='draft')
+    objects=models.Manager()
+    published=PublishedManager()
+    
+    tags=TaggableManager() #it allows to add,retrive and remove tags from post.
+    
+    class Meta:
+        ordering=('-publish',) 
+        
+    def get_absolute_url(self):
+        return reverse('blog-app:post-detail',
+                       args=[self.publish.year,self.publish.strftime('%m'),self.publish.strftime('%d'),self.slug]
+                       )
+    
+    def __str__(self):
+        return self.title
