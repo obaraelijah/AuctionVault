@@ -30,3 +30,39 @@ def post_list(request, tag_slug=None):
     
     return render(request, 'blog_list.html', context)
 
+
+def post_detail(request, year, month, day, post):
+    post=get_object_or_404(Post, slug=post,
+                           status='published',
+                           publish__year=year,
+                           publish_month=month,
+                           publish__day=day
+                           )
+    
+    #comments
+    comments=post.comments.filter(active=True)
+    tags=post.tags.all()
+    new_comment=None
+    if request.method == 'POST':
+        comment_form=CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment=comment_form.save(commit=False)
+            new_comment.post=post
+            new_comment.save()
+    else:
+        comment_form=CommentForm()
+        
+    
+    post_tags_ids=post.tags.values_list('id', flat=True)
+    similar_posts=Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts=similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:3]
+    context = {
+        'post': post,
+        'tags': tags,
+        'comments': comments,
+        'new_comment': new_comment,
+        'comment_form': comment_form,
+        'similar_posts': similar_posts,
+    }
+    return render(request,'blog_details.html', context)      
+        
