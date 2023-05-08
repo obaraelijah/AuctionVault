@@ -95,6 +95,15 @@ def post_share(request, post_id):
 
 
 
-            
-      
+def post_search(request):
+
+    if 'search_post' in request.GET:
         
+        search_post=request.GET['search_post']
+        if search_post:
+            #print(search_post,"samm")
+            queryset_post=Post.published.order_by('-publish').filter(body__icontains=search_post)
+            #print(queryset_post)
+    else:
+        queryset_post=None
+    return render(request,'search_post.html', { 'ql_post':queryset_post } )
