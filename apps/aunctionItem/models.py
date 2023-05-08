@@ -48,7 +48,7 @@ class Lot(models.Model):
     photo4=models.ImageField(upload_to='photos/optional/%Y/%m/%d/',blank=True)
     is_trending=models.BooleanField(default=False)
     on_banner=models.BooleanField(default=False)
-    year_published=models.DateTimeField(default=datetime.now()) 
+    year_published = models.DateTimeField(default=timezone.now)
     
     def get_absolute_url(self):
         return reverse('auction:single-item',args=[self.id,self.slug])

@@ -29,7 +29,7 @@ class Post(models.Model):
     tags=TaggableManager() #it allows to add,retrive and remove tags from post.
     
     class Meta:
-        ordering=('-published',) 
+        ordering=('-publish',) 
         
     def get_absolute_url(self):
         return reverse('blog-app:post-detail',
