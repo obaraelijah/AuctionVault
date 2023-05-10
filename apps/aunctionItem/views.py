@@ -165,7 +165,8 @@ def wishlist_submit(request):
                 messages.add_message(request, messages.ERROR,'You have already added this product to your wishlist.')
                 return redirect('wishlist')
         
-        wishlist=WishList( lot=lot,lot_id=lot_id,name=name,slug=slug,user_id=user_id)
+        wishlist=WishList(lot=lot,lot_id=lot_id,name=name,slug=slug,user_id=user_id)
         wishlist.save() 
         return redirect('wishlist')
     return redirect('wishlist')
+
