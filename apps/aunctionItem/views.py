@@ -37,3 +37,28 @@ def all_item(request,category_slug=None):
     return render(request,'all_item.html',context)
     
 
+def single_item(request,item_id,slug):
+    lot=get_object_or_404(Lot, id=item_id, slug=slug,)
+    auction= get_object_or_404(Auction,id=item_id)
+    #print(auction) 
+    
+    room=False
+    if request.user.is_authenticated:
+        room= request.user
+        #print(room)
+    slugged=Lot.objects.filter(slug=slug)
+    category=get_object_or_404(Category,slug=slug) 
+    
+    context={
+        'room_name_json':mark_safe(json.dumps(item_id)),
+        'auctionid':auction.id,
+        'username':mark_safe(json.dumps(request.user.username)),
+        'lot':lot,
+        'slugged':slugged,
+        'category':category,
+        'room':room,
+        'endingtime': auction.curr_time,
+        'total_views':5,
+    }
+    return render(request, 'single_item.html', context)
+    
