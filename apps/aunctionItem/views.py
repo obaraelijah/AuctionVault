@@ -62,3 +62,36 @@ def single_item(request,item_id,slug):
     }
     return render(request, 'single_item.html', context)
     
+def search(request,category_slug=None):
+    filter_category=Lot.objects.all()
+    
+    if 'search_box' in request.GET:
+        search_box=request.GET['search_box']
+        if search_box:
+            filter_category=filter_category.filter(
+                                                    Q(product_name__icontains=search_box)|
+                                                    Q(description__icontains=search_box)|            
+                                                     Q(category__name__icontains=search_box)|
+                                                    Q(seller__name=search_box)).distinct() #no duplicate results
+            
+    category=None 
+    categories=Category.objects.all()
+    if category_slug:
+        category=get_object_or_404(Category,slug=category_slug)   
+        filter_category = filter_category.filter(category=category)
+    filter_category = list(filter_category)
+    
+    lots=Lot.objects.order_by('-year_published')
+    paginator = Paginator(lots, 6) # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number) 
+    
+    context={
+        'lots' :page_obj,
+        'items':Lot.objects.all(),
+        'filters':filter_category,
+        'category':category,
+        'categories':categories,
+        
+    }
+    return render(request,'search.html',context)
