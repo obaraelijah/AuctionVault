@@ -170,3 +170,17 @@ def wishlist_submit(request):
         return redirect('wishlist')
     return redirect('wishlist')
 
+def subscribe(request):
+    if request.method =="POST":
+        email=request.POST.get('email')
+        if request.user.is_authenticated:      
+            has_subscribed=Subscribe.objects.all().filter(email=email)
+            if has_subscribed:
+                messages.add_message(request, messages.ERROR,'You have already subscribed')
+                return redirect('home-page')
+        
+        sub=Subscribe(email=email) 
+        sub.save()
+        return redirect('home-page')
+    return redirect('home-page')
+        
