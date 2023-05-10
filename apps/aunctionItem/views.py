@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Lot,Category,Auction,Seller,Contact,Wishlist,Subscribe
+from .models import Lot,Category,Auction,Seller,Contact,WishList,Subscribe
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -95,3 +95,15 @@ def search(request,category_slug=None):
         
     }
     return render(request,'search.html',context)
+
+
+def seller_page(request,seller): 
+    seller=Seller.objects.get(id=seller)
+    lots=Lot.objects.all()
+    #print(lot.filter(seller=seller[0]))
+    context={
+        'lot':lots,
+        'seller':seller
+    }
+    return render(request,'seller-page.html' , context)
+
