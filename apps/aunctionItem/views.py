@@ -114,3 +114,37 @@ def contact(request,id):
          #'title': sproperty.title 
     }
     return render(request,'contact_us.html',context)
+
+def contact_submit(request):
+    if request.method =='POST':
+        #print("Post")
+        lot_id=request.POST['lot_id']
+        slug=request.POST['slug']
+        lot=request.POST.get('lot_title')
+        name=request.POST['name']
+        email=request.POST.get('email')
+        #phone=request.POST.get('phone')
+        message=request.POST.get('message')
+        user_id=request.POST['user_id']
+        #seller_email=request.POST['seller_email']
+        #print(slug)
+        
+        if request.user.is_authenticated:
+            user_id=request.user.id
+            has_contacted=Contact.objects.all().filter(lot_id=lot_id,user_id=user_id)
+            if has_contacted:
+                messages.add_message(request, messages.ERROR,'You have already made an enquiry for this product')
+                return redirect('/auction/contact/'+lot_id)
+        
+        contact=Contact(lot=lot,lot_id=lot_id,name=name,email=email,slug=slug,message=message,user_id=user_id)
+        contact.save()
+        #sending email
+        send_mail(
+            lot,
+                message,
+                'elijahobara357@gmail.com',
+                [email,'samchino96@gmail.com'],
+        )    
+        messages.add_message(request, messages.SUCCESS, 'Your query has been submitted,we will get back to you soon') 
+        return redirect('dashboard')  
+    return redirect('dashboard')
