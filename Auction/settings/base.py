@@ -1,5 +1,6 @@
 from pathlib import Path
 import environ
+import os
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -142,11 +143,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = "/staticfiles/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_FILES_DIR = []
-MEDIA_URL = "/mediafiles/"
-MEDIA_ROOT = BASE_DIR / "mediafiles"
+STATIC_URL = '/static/'
+STATIC_ROOT= os.path.join(BASE_DIR,'static')  #useful while deploying project 
+
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'Auction/static')   #python manage.py help, python manage.py collectstatic
+]
+
+#Media url
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+MEDIA_URL='/media/'
 
 
 #messages

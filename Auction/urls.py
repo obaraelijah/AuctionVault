@@ -3,6 +3,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+app_name = "Auction"
+
 urlpatterns = [
     path('supersecret/', admin.site.urls),
     path('',include('apps.aunctionapp.urls'),name='auction-page'),

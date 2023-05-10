@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Aukshan - Home</title>
+  <title>Bestbid - Home</title>
 	<link rel="icon" href="/static/img/Fevicon.png" type="image/png">
   <link rel="stylesheet" href="{% static 'features/bootstrap/bootstrap.min.css' %} ">
   <link rel="stylesheet" href="{% static 'features/fontawesome/css/all.min.css' %}">
@@ -33,7 +33,7 @@
       <div class="main_menu">
         <nav class="navbar navbar-expand-lg navbar-light">
           <div class="container">
-            <a class="navbar-brand logo_h" href="{% url 'home-page' %}"><span style="padding-left:0px;"  > Bestbid</span></a>
+            <a class="navbar-brand logo_h" href="{% url 'aunctionapp:home-page' %}"><span style="padding-left:0px;"  > Bestbid</span></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="icon-bar"></span>
@@ -50,7 +50,7 @@
                 class="nav-item"
                 {% endif %}
                 
-                ><a class="nav-link" href="{% url 'home-page' %}"> <i class="fas fa-home"></i> Home</a></li>
+                ><a class="nav-link" href="{% url 'aunctionapp:home-page' %}"> <i class="fas fa-home"></i> Home</a></li>
 
                 <li 
 
@@ -60,7 +60,7 @@
                     class="nav-item"
                     {% endif %}
                 
-                >  <a class="nav-link" href="{% url 'about-page' %}"> <i class="fas fa-address-card"></i> About Us</a></li>
+                >  <a class="nav-link" href="{% url 'aunctionapp:about-page' %}"> <i class="fas fa-address-card"></i> About Us</a></li>
                 
                               <li
                               {% if 'all-item' in request.path %}
@@ -104,7 +104,7 @@
               <ul class="nav-shop">
                 <!-- <li class="nav-item"><input type="text"> <button ><i class="ti-search"></i></button></li> -->
                 
-              <li class="nav-item"><button><i class="ti-shopping-cart"> <a href="{% url 'dashboard' %}"> </i><span class="nav-shop__circle">values</span></a></button> </li>
+              <li class="nav-item"><button><i class="ti-shopping-cart"> <a href="{% url 'accounts:dashboard' %}"> </i><span class="nav-shop__circle">values</span></a></button> </li>
               </ul>
               <ul class="navbar navbar-expand-lg navbar-light" >
                 {% if user.is_authenticated %}
@@ -117,14 +117,14 @@
                 class="nav-item"
                 {% endif %}
                 
-                ><a class="nav-link" href="{% url 'dashboard' %}"> <i class="fas fa-user-check"></i>  {{ user.username }}</a></li>
+                ><a class="nav-link" href="{% url 'accounts:dashboard' %}"> <i class="fas fa-user-check"></i>  {{ user.username }}</a></li>
 
                 <li class="nav-item">
                 
                 
                 
                 <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}"> <i class="fas fa-sign-out-alt" ></i> Logout</a>
-                <form action="{% url 'logout' %}" id="logout" method="post" >
+                <form action="{% url 'accounts:logout' %}" id="logout" method="post" >
                   {% csrf_token %}
                   <input type="hidden">
                 </form>
@@ -138,7 +138,7 @@
                 class="nav-item"
                 {% endif %}
                 
-                ><a class="nav-link" href="{% url 'login' %}"> <i  class="fas fa-sign-in-alt"></i> Login</a></li>
+                ><a class="nav-link" href="{% url 'accounts:login' %}"> <i  class="fas fa-sign-in-alt"></i> Login</a></li>
               
 
              
@@ -149,7 +149,7 @@
                 {% else %}
                 class="nav-item"
                 {% endif %}
-                ><a class="nav-link" href="{% url 'register' %}">  Register</a></li>
+                ><a class="nav-link" href="{% url 'accounts:register' %}">  Register</a></li>
 
                 {% endif %}
                
