@@ -107,3 +107,10 @@ def seller_page(request,seller):
     }
     return render(request,'seller-page.html' , context)
 
+def contact(request,id):
+    lot=get_object_or_404(Lot,pk=id)
+    context={
+        'lot':lot,
+         #'title': sproperty.title 
+    }
+    return render(request,'contact_us.html',context)
