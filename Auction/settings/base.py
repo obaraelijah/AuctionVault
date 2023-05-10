@@ -111,6 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
 #channels config
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 ASGI_APPLICATION = 'Auction.routing.application'
 
 
