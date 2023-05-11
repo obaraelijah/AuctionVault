@@ -1,4 +1,967 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+	
+
+{% block css %}
+<style>
+
+	#badge {
   
-{% endblock content %}
+		position: relative;
+		top: -260px;
+		left: -92px;
+	}
+	#clockdiv{
+		font-family: sans-serif;
+		color: #fff;
+		display: inline-block;
+		font-weight: 100;
+		text-align: center;
+		font-size: 30px;
+	}
+	
+	#clockdiv > div{
+		padding: 10px;
+		border-radius: 3px;
+		background: #00BF96;
+		display: inline-block;
+	}
+	
+	#clockdiv div > span{
+		padding: 15px;
+		border-radius: 3px;
+		background: #00816A;
+		display: inline-block;
+	}
+	
+	.smalltext{
+		padding-top: 5px;
+		font-size: 16px;
+	}
+
+.product-view{
+  position: absolute;
+  display: none;
+  width: 800px;
+  height: auto;
+  padding: 25px;
+  border: 1px solid whitesmoke;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  -moz-transform: translate(-50%,-50%);
+  background-color: #ffffff;
+  z-index: 100;
+
+
+}
+
+.close-btn{
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 5px 10px 0;
+   font-size: 22px;
+   color: #92929292;
+   transform: scaleY(0.8);
+
+
+}
+
+.product-big-image{
+  width: 50%;
+  height: auto;
+  display: inline-block;
+  float: left;
+}
+
+
+.card-product-title{
+  width: 48%;
+  height: auto;
+  display: inline-block;
+  padding-right: 12px;
+  float: right;
+
+}
+
+.product-view-p{
+  padding-left: 60px;
+  padding-bottom: 10px;
+}
+
+
+
+</style>
+
+{% endblock %}
+{% block body %}
+	
+	<!-- ================ start banner area ================= -->
+	
+	<section  style="background-image: url('/static/img/melody.png');background-color: #cccccc; height:700px; background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: relative; " id="blog" >
+		<div class="container h-100 ">
+			<div style="text-align: center; padding-top:300px; " >
+				<div  >
+					<h1 style=" background-color:antiquewhite;" >{{ lot.product_name }}</h1>
+					
+					<nav aria-label="breadcrumb" class="banner-breadcrumb">
+            <ol  style=" background-color:antiquewhite;" class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{% url 'aunctionapp:home-page' %}">Home</a></li>
+			  <li class="breadcrumb-item active" aria-current="page">Shop Single</li>
+			 
+			</ol>
+			
+			
+			
+          </nav>
+				</div>
+			</div>
+    </div>
+	</section>
+
+	<!-- ================ end banner area ================= -->
+
+
+  <!--================Single Product Area =================-->
+	<div class="product_image_area">
+		<div class="container">
+			
+			<div class="row s_product_inner">
+				<div class="col-lg-6">
+				
+								<div class="column">
+									<img id=featured src="{{lot.main_photo.url}}">
+							
+									<div id="slide-wrapper" >
+										
+										<img id="slideLeft" class="arrow" src="/static/img/arrow-left.png">
+							
+										<div id="slider" style="padding-top: 50px;" >
+											<img class="thumbnail active" src="{{lot.main_photo.url}}">
+											{% if lot.photo1 %}
+											<img class="thumbnail" src="{{lot.photo1.url}}">
+											{% endif %}
+											{% if lot.photo2 %}
+											<img class="thumbnail" src="{{lot.photo2.url}}">
+											{% endif %}
+											{% if lot.photo3 %}
+											<img class="thumbnail" src="{{lot.photo3.url}}">
+											{% endif %}
+											{% if lot.photo4 %}
+											<img class="thumbnail" src="{{lot.photo4.url}}">
+											{% endif %}
+										</div>
+							
+										<img id="slideRight" class="arrow" src="/static/img/arrow-right.png">
+									</div>
+								</div>
+								 <a href="{% url 'auction:contact' lot.id %}"> <button class="button btn-dark">Make an Enquiry</button></a>
+								</div>
+								
+
+							
+
+
+						
+					
+				<div class="col-lg-5 offset-lg-1">
+					<div class="s_product_text">
+					
+						
+						
+						
+						   
+						<h3>{{ lot.product_name }}</h3>
+
+
+						<h3> Year dated : <span style="color: #6495ed;" >{{ lot.year_published | date:"D,d,M,Y"}} </span> </h3>
+						<h2> Base Price : $ {{ lot.base_price }}</h2>
+						
+						<ul class="list">
+							<li><a class="active" href="{{category.get_absolute_url}}"><span>Category</span> {{ lot.category }}</a></li>
+							<li><a href="#"><span> Status</span> {% if lot.is_live %} Live {% else %} Not Live {% endif %}</a></li>
+						</ul>
+
+					
+						<h1  id="winner" class="display-4" style="color:blueviolet" ></h1>
+						<p> {{ lot.description }}</p>
+
+						{% if lot.is_live %}
+
+						<div id="clockdiv">
+							<div>
+							  <span class="days"></span>
+							  <div class="smalltext">Days</div>
+							</div>
+							<div>
+							  <span class="hours"></span>
+							  <div class="smalltext">Hours</div>
+							</div>
+							<div>
+							  <span class="minutes"></span>
+							  <div class="smalltext">Minutes</div>
+							</div>
+							<div>
+							  <span class="seconds"></span>
+							  <div class="smalltext">Seconds</div>
+							</div>
+						  </div>
+					    
+						 
+							
+						
+							{{ room_name|json_script:"room-name" }}
+
+							
+
+						<!-- <h4> Time Left  :   <span id="clock" style="font-weight: 400;
+							color: #ea4c4c; margin-bottom: 60px;
+							text-align: center;
+							font: 300 2.25em $lato;"></span> </h4>
+						<h3 id="mess" ></h3> -->
+						<div>
+							
+						
+			  <label for="qty" style="padding-top: 70px;" >Current Price:</label>
+							
+			 
+							
+
+			  
+							
+
+			  <input id="chat-message-input" style="width: 100px;"   name="qty"  size="2" maxlength="12" value="{{lot.base_price}}" title="Bid now:" class="input-text qty">
+			  {% if room %}
+
+			  
+			  <button onclick="var result = document.getElementById('chat-message-input'); var sst = result.value; if( !isNaN( sst )) result.value= parseInt(result.value)+parseInt(10); return false;" class="increase items-count" type="button"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+			  
+     
+			  {% else %}
+			  <button  class="increase items-count" type="button"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
+			 
+			
+			  {% endif %}
+
+			  
+			 
+			  <!-- <i class="fas fa-gavel"  style="color: beige; padding-left:10px;padding-right:20px;" > </i> -->
+					{% if room  %}		           
+			  <input  class="button primary-btn" id="chat-message-submit" type="submit" value="bid now">
+			  {% else %}
+			  <button class="button primary-btn">login to bid </button>
+			  {% endif %}
+						</div>
+						{% else %}
+						<h1 class="display-4" style="color:#384aeb" >Product is not Live </h1>
+						{% endif %}
+						<div class="card_area d-flex align-items-center">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+							<form  class="form-contact contact_form" action="{% url 'auction:wishlist-submit'%}" method="POST">
+								{% csrf_token %}
+								{% if user.is_authenticated %}
+								<input type="hidden" name="user_id" value="{{ user.id }}" >
+								{% else %}
+								<input type="hidden" name="user_id" value="0">
+								{% endif %}
+								
+								<input type="hidden" name="lot_id" value="{{ lot.id }}" >
+								<input type="hidden" name="slug" value="{{ lot.slug}}">
+								<input type="hidden" name="lot" value="{{ lot.product_name}}" >
+								<input type="hidden" name="name" value="{{ lot.name}}" >
+								
+								  <button type="submit" > <i class="lnr lnr lnr-heart"></i> </button>
+								  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+							
+							<a class="icon_btn" href="#"><i class="lnr lnr lnr-eye"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="chat" ></div>
+	<!--================End Single Product Area =================-->
+
+	<!--================Product Description Area =================-->
+	<section class="product_description_area">
+		<div class="container">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item">
+					<a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Description</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+					 aria-selected="false">Specification</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+					 aria-selected="false">Comments</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+					 aria-selected="false">Auction History</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="review-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info"
+					 aria-selected="false">Vendor Info</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<p>{{lot.description}}</p>
+			
+				</div>
+				<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+					<div class="table-responsive">
+						<table class="table">
+							<tbody>
+								<tr>
+									<td>
+										<h5>Seller</h5>
+									</td>
+									<td>
+										<h5>{{lot.seller}}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>Product Name</h5>
+									</td>
+									<td>
+										<h5>{{lot.product_name}}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>Category</h5>
+									</td>
+									<td>
+										<h5>{{ lot.category }}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>Year Dated:</h5>
+									</td>
+									<td>
+										<h5>{{ lot.year_published | date:"D,d,M,Y" }}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>Is Treanding</h5>
+									</td>
+									<td>
+										<h5>{% if lot.is_trending %} Yes {% else %}No {% endif %}</h5>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<h5>Year published</h5>
+									</td>
+									<td>
+										<h5>{{ lot.year_published |date:"D d M Y"}}</h5>
+									</td>
+								</tr>
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="comment_list">
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="/static/img/product/review-1.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Blake Ruiz</h4>
+											<h5>12th Feb, 2018 at 05:56 pm</h5>
+											<a class="reply_btn" href="#">Reply</a>
+										</div>
+									</div>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+										commodo</p>
+								</div>
+								<div class="review_item reply">
+									<div class="media">
+										<div class="d-flex">
+											<img src="/static/img/product/review-2.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Blake Ruiz</h4>
+											<h5>12th Feb, 2018 at 05:56 pm</h5>
+											<a class="reply_btn" href="#">Reply</a>
+										</div>
+									</div>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+										commodo</p>
+								</div>
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="/static/img/product/review-3.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Blake Ruiz</h4>
+											<h5>12th Feb, 2018 at 05:56 pm</h5>
+											<a class="reply_btn" href="#">Reply</a>
+										</div>
+									</div>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+										commodo</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="review_box">
+								<h4>Post a comment</h4>
+								<form class="row contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="text" class="form-control" id="name" name="name" placeholder="Your Full name">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="email" class="form-control" id="email" name="email" placeholder="Email Address">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<input type="text" class="form-control" id="number" name="number" placeholder="Phone Number">
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<textarea class="form-control" name="message" id="message" rows="1" placeholder="Message"></textarea>
+										</div>
+									</div>
+									<div class="col-md-12 text-right">
+										<button type="submit" value="submit" class="btn primary-btn">Submit Now</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+					{% if lot.is_live %}
+                          
+					 
+					
+
+				
+						
+						  <div class="row justify-content-center">
+							<div class="col-md-12 heading-section text-center ftco-animate mb-5">
+								<table id="chat-log"  class="table">
+									
+									
+					
+									
+										<tbody >
+										
+										<tr>
+											
+											<td> <h4>Name</h4></td>
+											<td><h4>TimeStamp</h4></td>
+											
+								
+											<td>   <div class="col-md-12 form-group">
+												<button type="submit" value="submit"  class="button button-tracking"><a href="#" style="color: aliceblue;">Price</a></button>
+											</div>
+										</td>
+										</tr>
+													  
+										</tbody>
+								
+							   </table>
+							</div>
+						  </div>
+						 
+
+					</div>
+					<div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="comment_list">
+
+
+									<div class="review_item">
+										<div class="media">
+											<div   class="d-flex">
+												<img style="width: 100px; height: auto"  src="{{ lot.seller.seller_photo.url }}" alt="No image">
+											</div>
+											<div class="media-body">
+												<h4>{{ lot.seller.name }}</h4>
+												<h5>{{ lot.seller.email }}</h5>
+
+												<a class="reply_btn" href="{{lot.seller.get_absolute_url}}">View Profile</a>
+											</div>
+										</div>
+										
+									</div>
+									
+									
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				
+
+
+				{% else %}
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="row total_rate">
+								<div class="col-6">
+									<div class="box_total">
+										<h5>Overall</h5>
+										<h4>4.0</h4>
+										<h6>(03 Reviews)</h6>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="rating_list">
+										<h3>Based on 3 Reviews</h3>
+										<ul class="list">
+											<li><a href="#">5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+											<li><a href="#">4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+											<li><a href="#">3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+											<li><a href="#">2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+											<li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+													 class="fa fa-star"></i><i class="fa fa-star"></i> 01</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="review_list">
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="/static/img/product/review-1.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Blake Ruiz</h4>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+										commodo</p>
+								</div>
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="/static/img/product/review-2.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Blake Ruiz</h4>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+										commodo</p>
+								</div>
+								<div class="review_item">
+									<div class="media">
+										<div class="d-flex">
+											<img src="/static/img/product/review-3.png" alt="">
+										</div>
+										<div class="media-body">
+											<h4>Blake Ruiz</h4>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+									</div>
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+										dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+										commodo</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="review_box">
+								<h4>Add a Review</h4>
+								<p>Your Rating:</p>
+								<ul class="list">
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+									<li><a href="#"><i class="fa fa-star"></i></a></li>
+								</ul>
+								<p>Outstanding</p>
+                <form action="#/" class="form-contact form-review mt-3">
+                  <div class="form-group">
+                    <input class="form-control" name="name" type="text" placeholder="Enter your name" required>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control" name="email" type="email" placeholder="Enter email address" required>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control" name="subject" type="text" placeholder="Enter Subject">
+                  </div>
+                  <div class="form-group">
+                    <textarea class="form-control different-control w-100" name="textarea" id="textarea" cols="30" rows="5" placeholder="Enter Message"></textarea>
+                  </div>
+                  <div class="form-group text-center text-md-right mt-3">
+                    <button type="submit" class="button button--active button-review">Submit Now</button>
+                  </div>
+                </form>
+							</div>
+						</div>
+					</div>
+					{% endif %}
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	<!--================End Product Description Area =================-->
+
+	<!--================ Start related Product area =================-->  
+	<section class="related-product-area section-margin--small mt-10">
+		<div class="container">
+			<div class="section-intro pb-60px">
+        <p>Popular Item in the market</p>
+        <h2>Top <span class="section-intro__style">Related Products</span></h2>
+      </div>
+	  <div class="row">
+		{% if slugged %}
+		{% for item in slugged %}
+		<div class="col-md-6 col-lg-4 col-xl-3">
+		  <div class="card text-center card-product">
+			<div class="card-product__img">
+			  <img  style="width: 350px; height:300px; padding-left:30px;padding-right:30px; " class="card-img" src="{{ item.main_photo.url }}" alt="">
+			  {% if item.is_live %}
+                  <button  class="btn btn-primary" id="badge" >Live</button>
+                  {% else %}
+                  <button  class="btn btn-danger" id="badge" >Not Live</button>
+                  {% endif %} 
+			  <ul class="card-product__imgOverlay">
+				<li><button><i class="ti-search"></i></button></li>
+				<li><button><i class="ti-shopping-cart"></i></button></li>
+				<li><button><i class="ti-heart"></i></button></li>
+			  </ul>
+			</div>
+
+			<div class="product-view" >
+				<div class="close-btn" >X</div>
+				<div class="product-big-image" >
+				<img class="card-img" src="{{ item.main_photo.url }}" alt="">
+				</div>
+				
+				<div class="card-product-title" >
+				
+				<button class="button primary-btn">Make an Enquiry</button>
+				
+				<h3  class="product-view-p"><a href="{{ item.get_absolute_url }}">{{ item.product_name }}</a></h3>
+				<h5>Category: {{ item.category }}</h5>
+				<h4 > Price : ${{ item.base_price |intcomma }}</h4>
+				<h5 class="product-view-p"  > Year dated :{{ item.year_published|date:"D,d,M,Y"}}</h5>
+				<p  class="product-view-p" > {{item.description}} <p>
+				<button class="button primary-btn" >Bid Now</button>
+				</div>
+			  </div>
+			<div class="card-body">
+			  <p> {% if item.category %} {{ item.category}} {% else %} Product {% endif %}</p>
+			  <h4 class="card-product__title"><a href="{{ item.get_absolute_url }}">{{ item.product_name }}</a></h4>
+			  <p class="card-product__price">${{ item.base_price |intcomma }}</p>
+		  
+			</div>
+		  </div>
+		</div>
+		{% endfor %}
+	   {% else %}
+		<h6> No related products </h6>
+		{% endif %}
+	  </div>
+		</div>
+	</section>
+	<!--================ end related Product area =================-->  	
+
+  
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<script type="text/javascript"  src="{% static 'reconnecting-websocket.js' %}" ></script>
+<script>
+
+/*
+
+const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+const chatSocket = new WebSocket(
+	'ws://'
+	+ window.location.host
+	+ '/ws/chat/'
+	+ roomName
+	+ '/'
+);*/
+
+//
+var room_name_json = "{{ room_name_json }}"
+var roomName = "{{ auctionid | escapejs }}";
+var username = "{{ username }}";
+var winner;
+
+var chatSocket = new  ReconnectingWebSocket(
+	'ws://' + window.location.host + '/ws/auction/' + room_name_json+'/' + '{{lot.slug }}/'
+
+);
+
+chatSocket.onopen=function(e)
+{
+	fetchMessages();
+}
+
+chatSocket.onmessage = function(e) {
+	const data = JSON.parse(e.data);
+	if(data['command']==='messages'){
+		for(let i=0;i<data['messages'].length;i++){
+			createMessage(data['messages'][i]);
+		}
+	}else if(data['command'] ==='new_message'){
+		createMessage(data['message']);
+	}
+};
+	
+	
+
+
+chatSocket.onclose = function(e) {
+	console.error('Chat socket closed unexpectedly');
+};
+
+//document.querySelector('#chat-message-input').focus();
+document.querySelector('#chat-message-input').onkeyup = function(e) {
+	if (e.keyCode === 13) {  // enter, return
+		document.querySelector('#chat-message-submit').click();
+	}
+};
+
+
+
+document.querySelector('#chat-message-submit').onclick = function(e) {
+	const messageInputDom = document.querySelector('#chat-message-input');
+	const message = messageInputDom.value;
+	
+	chatSocket.send(JSON.stringify({
+		command:"new_message",
+		message: message,
+		from:username,
+		auction_id: roomName
+
+	}));
+	
+	messageInputDom.value = parseInt(message) + 10;
+};
+
+function fetchMessages()
+{
+	chatSocket.send(JSON.stringify({ auction_id:roomName,command:"fetch_messages"}));
+};
+
+function createMessage(data){
+	
+	
+	var author=data['author'];
+	var timecap=data['timecap'];
+	winner= data.author;
+	console.log(winner);
+	console.log(timecap);
+
+	var msgListTag = document.createElement('tbody');
+	var td=document.createElement('td'); //to store name
+	var username="{{username}}";
+	td.textContent=author;
+	msgListTag.appendChild(td);
+	var td=document.createElement('td');
+	td.textContent=timecap;
+	msgListTag.appendChild(td);
+
+	var td=document.createElement('td');
+	var pTag=document.createElement("div");
+	pTag.classList.add("col-md-12");
+	var button=document.createElement('button');
+	button.classList.add("button");
+	button.classList.add("button-tracking");
+	button.textContent=data.price;
+	document.querySelector("#chat-message-input").value =parseInt(data["price"]) + 10;
+	pTag.appendChild(button);
+	td.appendChild(pTag);
+
+	msgListTag.appendChild(td);
+	
+	document.querySelector('#chat-log').appendChild(msgListTag);
+};
+
+
+
+var endingtime = "{{ endingtime|date:'M j, Y G:i:s' }}";
+
+var countDownDate = new Date(endingtime).getTime();
+//for 1000ms
+ var x = setInterval(function() {
+ 
+  var now = new Date().getTime();
+ 
+
+  var difference = countDownDate - now;
+  
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+  var hours = Math.floor(
+	(difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+  
+  var daysSpan = document.querySelector('.days');
+  var hoursSpan = document.querySelector('.hours');
+  var minutesSpan = document.querySelector('.minutes');
+  var secondsSpan = document.querySelector('.seconds');
+
+  daysSpan.innerHTML=days;
+  hoursSpan.innerHTML=hours;
+  minutesSpan.innerHTML=minutes;
+  secondsSpan.innerHTML=seconds;
+
+
+
+	if (difference < 0) {
+	  clearInterval(x);
+	  daysSpan.innerHTML="00";
+  hoursSpan.innerHTML="00";
+  minutesSpan.innerHTML="00";
+  secondsSpan.innerHTML="00";
+  if(winner){
+  document.getElementById('winner').textContent="The Winner is " +winner;
+  }else{
+	document.getElementById('winner').textContent="No Winner declared";
+
+  }
+
+	  document.getElementById("chat-message-submit").disabled = true;
+	  var bidbutton=document.getElementById("chat-message-submit");
+	  if( bidbutton.disabled === true )
+	  {
+		  document.getElementById("demo").innerHTML = "The Auction has Ended";
+	  }
+	}
+ },1000); 
+
+
+
+
+</script>
+
+
+{% endblock %}
