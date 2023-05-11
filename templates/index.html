@@ -110,9 +110,6 @@
     </div>
 
 
-
-
-
     {%  if items_banner %}
     {% for item in items_banner %}
     <div class="carousel-item">
@@ -169,11 +166,6 @@
 
 
   <!--================ Hero Carousel end =================-->
-
-
-
-
- 
   <section class="section-margin calc-60px">
     <div class="container">
       <div class="section-intro pb-60px">
@@ -214,9 +206,6 @@
       </div>
     </div>
   </section>
-
-
-
 
   <!-- ================ trending product section start ================= -->  
   <section class="section-margin calc-60px">
@@ -289,12 +278,6 @@
           left: 990px; "> <a href="{% url 'auction:search-page' %}" style="color: #ffffff;" > View More </a> </button>
         </div>
     
-         
-
-          
-
-         
-
           <div class="row">
             {% for item in items %}
              
@@ -408,13 +391,6 @@
     </section>
   
 
-
-
-
-
-
-
-
     {% block script %}
 
     <script src="{% static 'features/jquery/jquery-3.2.1.min.js' %}"></script>
@@ -431,8 +407,6 @@
         });
     
       });
-
-
    </script>
    {% endblock %}
  
