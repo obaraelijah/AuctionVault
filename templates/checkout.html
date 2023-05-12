@@ -12,10 +12,6 @@ checkOut
 
 
 {% block body %}
-
-
-
-
 <div class="container">
 
   {% if messages %}
@@ -50,7 +46,6 @@ checkOut
     </li>
   </ol>
 </nav>
-
 
 <div class="col my-4 " >
     <h2>Step 2 - Enter Address and other details </h2>
@@ -97,9 +92,6 @@ checkOut
         <button type="submit" class="btn btn-primary" style="margin-bottom: 100px;" onclick="placeOrder()" >Place Order</button>
       </form>
 </div>
-
-
-
 {% endblock %}
 
 {% block js %}
@@ -139,15 +131,11 @@ $('#items').append(mystr);
 //document.getElementById('cart').innerHTML=sum;
 document.getElementById('totalPrice').innerHTML=price;
 $("#itemsJson").val(JSON.stringify(cart));
-
-
 function placeOrder()
 {
   console.log("clicked");
   localStorage.clear();
 
 }
-
-
 </script>
 {% endblock %}
